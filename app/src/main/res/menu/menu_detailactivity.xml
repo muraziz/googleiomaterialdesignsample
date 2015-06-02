@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_settings" android:title="@string/action_settings" />
+    <item android:id="@+id/action_star"
+        android:title="@string/star"
+        android:icon="@drawable/star"
+        android:checkable="true"
+        app:showAsAction="always"/>
+</menu>

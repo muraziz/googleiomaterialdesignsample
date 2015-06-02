@@ -4,4 +4,5 @@
     <string name="drawer_close">Menu closed</string>
     <string name="action_settings">Settings</string>
     <string name="master_activity_name">Music Library</string>
+    <string name="star">Star</string>
 </resources>

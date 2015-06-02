@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -79,24 +80,6 @@ public class AlbumListFragment extends Fragment {
                 holder = (ViewHolder)convertView.getTag();
             }
             final Album currentAlbum = getItem(position);
-            /*Target target = new Target() {
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-                }
-
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    Palette palette = Palette.generate(bitmap);
-                    holder.txtContainer.setBackgroundColor(palette.getMutedSwatch().getRgb());
-                    holder.cover.setImageBitmap(bitmap);
-                    currentAlbum.paletteColor = palette.getMutedSwatch().getRgb();
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                }
-            };
-            Picasso.with(mContext).load(currentAlbum.resourceIdSmall).into(target);*/
             Picasso.with(mContext).load(currentAlbum.resourceIdSmall).into(holder.cover, new Callback() {
                 @Override
                 public void onSuccess() {
@@ -105,18 +88,21 @@ public class AlbumListFragment extends Fragment {
                     int paletteColor = palette.getMutedSwatch().getRgb();
                     holder.txtContainer.setBackgroundColor(paletteColor);
                     currentAlbum.paletteColor = paletteColor;
-
-                    Log.d("palette", "Picasso.onSuccess() position="+position+", color="+paletteColor);
                 }
 
                 @Override
                 public void onError() {
-
                 }
             });
             holder.txtAlbum.setText(currentAlbum.album);
             holder.txtSinger.setText(currentAlbum.singer);
             holder.favorite.setChecked(currentAlbum.favorite);
+            holder.favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    currentAlbum.favorite = checked;
+                }
+            });
             final int albumIndex = position;
             holder.cover.setOnClickListener(new View.OnClickListener() {
                 @Override
