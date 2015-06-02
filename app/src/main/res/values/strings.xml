@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">IOExt2015TashAnim</string>
+    <string name="drawer_open">Menu opened</string>
+    <string name="drawer_close">Menu closed</string>
+    <string name="action_settings">Settings</string>
+    <string name="master_activity_name">Music Library</string>
+</resources>
