@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="MainActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/myPrimaryColor</item>
         <item name="colorPrimaryDark">@color/myPrimaryDarkColor</item>
@@ -31,6 +31,12 @@
 
     <style name="DetailActivityToolbar" parent="@style/BaseToolBarStyle">
 
+    </style>
+
+    <style name="DetailActivityTheme" parent="MainActivityTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <style name="TextStyleAlbumAuthor" parent="TextAppearance.AppCompat.Large">

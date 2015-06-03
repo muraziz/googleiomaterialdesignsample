@@ -43,16 +43,22 @@ public class AlbumListFragment extends Fragment {
         return mGridView;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
+    private void showDetails(View selectedView, int albumIndex) {
+        int[] screenLocation = new int[2];
+        selectedView.getLocationOnScreen(screenLocation);
+        String packageName = getActivity().getPackageName();
 
-    private void showDetails(int albumIndex) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), DetailActivity.class);
         intent.putExtra(DetailActivity.ALBUM_INDEX, albumIndex);
+        intent.putExtra(packageName + ".left", screenLocation[0]);
+        intent.putExtra(packageName + ".top", screenLocation[1]);
+        intent.putExtra(packageName + ".width", selectedView.getWidth());
+        intent.putExtra(packageName + ".height", selectedView.getHeight());
         getActivity().startActivity(intent);
+
+        // disable default transitions
+        getActivity().overridePendingTransition(0, 0);
     }
 
     private class AlbumAdapter extends ArrayAdapter<Album> {
@@ -107,7 +113,7 @@ public class AlbumListFragment extends Fragment {
             holder.cover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showDetails(albumIndex);
+                    showDetails(view, albumIndex);
                 }
             });
             return convertView;
