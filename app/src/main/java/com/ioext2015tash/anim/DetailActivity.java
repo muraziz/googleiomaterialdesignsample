@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -21,12 +22,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ioext2015tash.anim.data.Album;
 import com.ioext2015tash.anim.data.AlbumList;
+import com.ioext2015tash.anim.interpolators.EaseInCirc;
 import com.ioext2015tash.anim.interpolators.EaseOutCirc;
 import com.ioext2015tash.anim.widget.SquareImageView;
 
@@ -44,6 +48,9 @@ public class DetailActivity extends AppCompatActivity {
     private View mSongDetailsContainer;
     private View mSongDetailsContainerInner;
     private ImageView mFab;
+
+    // coordinates of image in previous activity
+    private int mLeft, mTop, mWidth;
 
     TextView mTxtAlbumAuthor, mTxtAlbumTitle, mTxtSongNumber, mTxtSongTitle, mTxtSongDuration;
     ImageView mImgVolume;
@@ -88,6 +95,16 @@ public class DetailActivity extends AppCompatActivity {
                 .setDuration(600);
     }
 
+    private void fadeOutBackground(int startDelay) {
+        // manipulation starts
+        View windowBgAlternative = findViewById(R.id.windowBgAlternative);
+        windowBgAlternative.animate()
+                .alpha(0)
+                .setStartDelay(startDelay)
+                .setInterpolator(new AccelerateInterpolator())
+                .setDuration(800 - startDelay);
+    }
+
     private void preAnimInit() {
         // scale fab down to 0
         mFab.setScaleX(0);
@@ -106,9 +123,9 @@ public class DetailActivity extends AppCompatActivity {
     private void scaleUpAlbumCover() {
         String packageName = getPackageName();
         Intent incomingIntent = getIntent();
-        final int left = incomingIntent.getIntExtra(packageName + ".left", 0);
-        final int top = incomingIntent.getIntExtra(packageName + ".top", 0);
-        final int width = incomingIntent.getIntExtra(packageName + ".width", 0);
+        mLeft = incomingIntent.getIntExtra(packageName + ".left", 0);
+        mTop = incomingIntent.getIntExtra(packageName + ".top", 0);
+        mWidth = incomingIntent.getIntExtra(packageName + ".width", 0);
 
         mImgAlbumCover.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -118,9 +135,9 @@ public class DetailActivity extends AppCompatActivity {
                 int[] screenLocation = new int[2];
                 mImgAlbumCover.getLocationOnScreen(screenLocation);
 
-                int translationX = left - screenLocation[0];
-                int translationY = top - screenLocation[1];
-                float scale = width / (float) mImgAlbumCover.getWidth();
+                int translationX = mLeft - screenLocation[0];
+                int translationY = mTop - screenLocation[1];
+                float scale = mWidth / (float) mImgAlbumCover.getWidth();
 
                 mImgAlbumCover.setTranslationX(translationX);
                 mImgAlbumCover.setTranslationY(translationY);
@@ -242,6 +259,10 @@ public class DetailActivity extends AppCompatActivity {
         mToolbar.animate().alpha(1).setDuration(400).setInterpolator(new DecelerateInterpolator());
     }
 
+    private void fadeOutToolbar() {
+        mToolbar.animate().alpha(0).setDuration(400).setInterpolator(new AccelerateInterpolator());
+    }
+
     private void init(Album album) {
         int oneSide = getDisplayWidth();
 
@@ -312,16 +333,76 @@ public class DetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_star) {
-            item.setChecked(!item.isChecked());
-            Album currentAlbum = AlbumList.ITEMS[mCurrentAlbumIndex];
-            currentAlbum.favorite = !currentAlbum.favorite;
-            setStarChecked(item, currentAlbum.favorite);
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_star:
+                item.setChecked(!item.isChecked());
+                Album currentAlbum = AlbumList.ITEMS[mCurrentAlbumIndex];
+                currentAlbum.favorite = !currentAlbum.favorite;
+                setStarChecked(item, currentAlbum.favorite);
+                return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        triggerFadeOutTextAndScaleDownFab();
+        fadeOutToolbar();
+        fadeOutBackground(300);
+    }
+
+    private void triggerFadeOutTextAndScaleDownFab() {
+
+        ObjectAnimator fadeOutAlbumAuthor = ObjectAnimator.ofFloat(mAlbumAuthorTitleContainer,
+                View.ALPHA, 0);
+        ObjectAnimator fadeOutSongDetails = ObjectAnimator.ofFloat(mSongDetailsContainer,
+                View.ALPHA, 0);
+        PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 0);
+        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 0);
+        ObjectAnimator scaleDownFab = ObjectAnimator.ofPropertyValuesHolder(mFab, pvhX, pvhY);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(fadeOutAlbumAuthor, fadeOutSongDetails, scaleDownFab);
+        animatorSet.setDuration(400);
+        animatorSet.setInterpolator(new AccelerateInterpolator());
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                triggerReverseImageScaling();
+            }
+        });
+        animatorSet.start();
+    }
+
+    private void triggerReverseImageScaling() {
+
+        int[] screenLocation = new int[2];
+        mImgAlbumCover.getLocationOnScreen(screenLocation);
+
+        int translationX = mLeft - screenLocation[0];
+        int translationY = mTop - screenLocation[1];
+        float scale = mWidth / (float) mImgAlbumCover.getWidth();
+
+        mImgAlbumCover.animate()
+                .translationX(translationX)
+                .translationY(translationY)
+                .scaleX(scale)
+                .scaleY(scale)
+                .setDuration(400)
+                .setInterpolator(new DecelerateInterpolator())
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                    finish();
+                    overridePendingTransition(0, 0);
+                    }
+                });
+
     }
 }
