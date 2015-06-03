@@ -12,7 +12,6 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,15 +21,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ioext2015tash.anim.data.Album;
 import com.ioext2015tash.anim.data.AlbumList;
+import com.ioext2015tash.anim.interpolators.EaseOutCirc;
 import com.ioext2015tash.anim.widget.SquareImageView;
 
 /**
@@ -43,11 +40,13 @@ public class DetailActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private SquareImageView mImgAlbumCover;
     private int mCurrentAlbumIndex;
-    private View mWindowBgAlternative;
-    private View mLLContainer;
     private View mAlbumAuthorTitleContainer;
     private View mSongDetailsContainer;
+    private View mSongDetailsContainerInner;
     private ImageView mFab;
+
+    TextView mTxtAlbumAuthor, mTxtAlbumTitle, mTxtSongNumber, mTxtSongTitle, mTxtSongDuration;
+    ImageView mImgVolume;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,42 +56,36 @@ public class DetailActivity extends AppCompatActivity {
         mCurrentAlbumIndex = getIntent().getIntExtra(ALBUM_INDEX, 0);
         Album album = AlbumList.ITEMS[mCurrentAlbumIndex];
 
-        mLLContainer = findViewById(R.id.llContainer);
         mAlbumAuthorTitleContainer = findViewById(R.id.containerAlbumAuthorTitle);
         mSongDetailsContainer = findViewById(R.id.songDetailsContainer);
+        mSongDetailsContainerInner = findViewById(R.id.songDetailsContainerInner);
 
         mToolbar = (Toolbar)findViewById(R.id.toolbar_actionbar);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // manipulation starts
-        mWindowBgAlternative = findViewById(R.id.windowBgAlternative);
-        mWindowBgAlternative.setAlpha(0);
-
-        mWindowBgAlternative.animate()
-                .alpha(1)
-                .setInterpolator(new DecelerateInterpolator())
-                .setDuration(1000);
-
-
-
-        mWindowBgAlternative.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                /*fadeInToolbar();
-                stretchBottomPanels();*/
-            }
-        }, 1000);
-
         mFab = (ImageView) findViewById(R.id.fab);
 
         init(album);
+
         adjustFAB();
 
         preAnimInit();
 
+        fadeInBackground();
         scaleUpAlbumCover();
+    }
+
+    private void fadeInBackground() {
+        // manipulation starts
+        View windowBgAlternative = findViewById(R.id.windowBgAlternative);
+        windowBgAlternative.setAlpha(0);
+
+        windowBgAlternative.animate()
+                .alpha(1)
+                .setInterpolator(new DecelerateInterpolator())
+                .setDuration(600);
     }
 
     private void preAnimInit() {
@@ -104,6 +97,10 @@ public class DetailActivity extends AppCompatActivity {
 
         mSongDetailsContainer.setVisibility(View.INVISIBLE);
         mAlbumAuthorTitleContainer.setVisibility(View.INVISIBLE);
+
+        mTxtAlbumAuthor.setAlpha(0);
+        mTxtAlbumTitle.setAlpha(0);
+        mSongDetailsContainerInner.setAlpha(0);
     }
 
     private void scaleUpAlbumCover() {
@@ -123,7 +120,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 int translationX = left - screenLocation[0];
                 int translationY = top - screenLocation[1];
-                float scale = width / (float)mImgAlbumCover.getWidth();
+                float scale = width / (float) mImgAlbumCover.getWidth();
 
                 mImgAlbumCover.setTranslationX(translationX);
                 mImgAlbumCover.setTranslationY(translationY);
@@ -131,13 +128,15 @@ public class DetailActivity extends AppCompatActivity {
                 mImgAlbumCover.setScaleY(scale);
                 mImgAlbumCover.setPivotX(0);
                 mImgAlbumCover.setPivotY(0);
+
                 mImgAlbumCover.animate()
                         .translationX(0)
                         .translationY(0)
                         .scaleX(1)
                         .scaleY(1)
-                        .setDuration(800)
-                        .setInterpolator(new AccelerateDecelerateInterpolator())
+                        .setDuration(400)
+                        .setStartDelay(100)
+                        .setInterpolator(new EaseOutCirc())
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
@@ -145,8 +144,6 @@ public class DetailActivity extends AppCompatActivity {
                                 stretchBottomPanels();
                             }
                         });
-
-
                 return true;
             }
         });
@@ -177,9 +174,10 @@ public class DetailActivity extends AppCompatActivity {
                 ObjectAnimator animSongDetailsTop = ObjectAnimator.ofInt(mSongDetailsContainer,
                         "top", albumTitleTop, songDetailsTop);
 
+                Animator textFadeInAnimator = getTextFadeInAnimator(300, 400);
                 AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playTogether(animAlbumTitle, animSongDetailsTop, animSongDetailsBottom);
-                animatorSet.setDuration(1000);
+                animatorSet.playTogether(animAlbumTitle, animSongDetailsTop, animSongDetailsBottom, textFadeInAnimator);
+                animatorSet.setDuration(500);
                 animatorSet.setInterpolator(new DecelerateInterpolator());
                 animatorSet.start();
 
@@ -192,7 +190,21 @@ public class DetailActivity extends AppCompatActivity {
             public void run() {
                 scaleUpFab();
             }
-        }, 800);
+        }, 500);
+    }
+
+    private Animator getTextFadeInAnimator(int startDelay, int duration) {
+        ObjectAnimator animTxtAlbumAuthor = ObjectAnimator.ofFloat(mTxtAlbumAuthor, View.ALPHA, 1);
+        ObjectAnimator animTxtAlbumTitle = ObjectAnimator.ofFloat(mTxtAlbumTitle, View.ALPHA, 1);
+        View songDetailsContainerInner = findViewById(R.id.songDetailsContainerInner);
+        ObjectAnimator animSongDetails = ObjectAnimator.ofFloat(songDetailsContainerInner, View.ALPHA, 1);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animTxtAlbumAuthor, animTxtAlbumTitle, animSongDetails);
+        animatorSet.setStartDelay(startDelay);
+        animatorSet.setInterpolator(new EaseOutCirc());
+        animatorSet.setDuration(duration);
+        return animatorSet;
     }
 
     private void adjustFAB() {
@@ -203,9 +215,8 @@ public class DetailActivity extends AppCompatActivity {
                 int translationX = mImgAlbumCover.getRight() - mFab.getWidth();
                 int translationY = mImgAlbumCover.getBottom() - mFab.getHeight() / 2;
 
+                float rightPadding = dpToPx(14);
                 // add right padding
-                Resources r = getResources();
-                float rightPadding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, r.getDisplayMetrics());
                 translationX -= rightPadding;
                 mFab.setTranslationX(translationX);
                 mFab.setTranslationY(translationY);
@@ -214,12 +225,17 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    private float dpToPx(int dp) {
+        Resources r = getResources();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+    }
+
     private void scaleUpFab() {
         mFab.animate()
-                .setDuration(600)
+                .setDuration(500)
                 .scaleX(1)
                 .scaleY(1)
-                .setInterpolator(new DecelerateInterpolator());
+                .setInterpolator(new EaseOutCirc());
     }
 
     private void fadeInToolbar() {
@@ -240,26 +256,26 @@ public class DetailActivity extends AppCompatActivity {
         View albumAuthorTitleContainer = findViewById(R.id.containerAlbumAuthorTitle);
         albumAuthorTitleContainer.setBackgroundColor(album.paletteColor);
 
-        TextView txtAlbumAuthor = (TextView)findViewById(R.id.txtAlbumAuthor);
-        txtAlbumAuthor.setText(album.singer);
+        mTxtAlbumAuthor = (TextView)findViewById(R.id.txtAlbumAuthor);
+        mTxtAlbumAuthor.setText(album.singer);
 
-        TextView txtAlbumTitle = (TextView)findViewById(R.id.txtAlbumTitle);
-        txtAlbumTitle.setText(album.album);
+        mTxtAlbumTitle = (TextView)findViewById(R.id.txtAlbumTitle);
+        mTxtAlbumTitle.setText(album.album);
 
-        TextView txtSongNumber = (TextView)findViewById(R.id.txtSongNumber);
-        txtSongNumber.setText("1");
+        mTxtSongNumber = (TextView)findViewById(R.id.txtSongNumber);
+        mTxtSongNumber.setText("1");
 
-        TextView txtSongTitle = (TextView)findViewById(R.id.txtSongTitle);
-        txtSongTitle.setText(album.songTitle);
+        mTxtSongTitle = (TextView)findViewById(R.id.txtSongTitle);
+        mTxtSongTitle.setText(album.songTitle);
 
-        TextView txtSongDuration = (TextView)findViewById(R.id.txtSongDuration);
-        txtSongDuration.setText(album.songDuration);
+        mTxtSongDuration = (TextView)findViewById(R.id.txtSongDuration);
+        mTxtSongDuration.setText(album.songDuration);
 
-        ImageView imgVolume = (ImageView)findViewById(R.id.imgVolume);
+        mImgVolume = (ImageView)findViewById(R.id.imgVolume);
         BitmapDrawable volumeIcon = (BitmapDrawable)getResources().getDrawable(R.drawable.perm_group_audio_settings);
         int accentColor = getResources().getColor(R.color.myAccentColor);
         volumeIcon.setColorFilter(accentColor, PorterDuff.Mode.SRC_ATOP);
-        imgVolume.setImageDrawable(volumeIcon);
+        mImgVolume.setImageDrawable(volumeIcon);
     }
 
     private int getDisplayWidth() {
