@@ -1,4 +1,4 @@
-package com.ioext2015tash.inboxlikeanim;
+package com.ioext2015tash.inboxlikeanim.drawer;
 
 
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.ioext2015tash.inboxlikeanim.R;
 
 import java.util.List;
 

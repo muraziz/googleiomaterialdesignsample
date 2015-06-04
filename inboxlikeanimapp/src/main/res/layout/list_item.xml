@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:padding="10dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:id="@+id/letterIcon"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/letterIcon"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:ellipsize="marquee"
+        android:id="@+id/msgTitle"
+        android:paddingTop="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:layout_alignLeft="@id/msgTitle"
+        android:layout_below="@id/msgTitle"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:singleLine="true"
+        android:id="@+id/msgSender"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:layout_alignLeft="@id/msgSender"
+        android:layout_below="@id/msgSender"
+        android:textSize="14sp"
+        android:id="@+id/msgBody"
+        android:paddingBottom="5dp"/>
+
+</RelativeLayout>

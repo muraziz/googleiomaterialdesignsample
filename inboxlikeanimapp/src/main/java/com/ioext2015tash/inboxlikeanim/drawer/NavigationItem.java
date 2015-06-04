@@ -1,4 +1,4 @@
-package com.ioext2015tash.inboxlikeanim;
+package com.ioext2015tash.inboxlikeanim.drawer;
 
 
 import android.graphics.drawable.Drawable;
