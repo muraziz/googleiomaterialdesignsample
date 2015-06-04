@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:id="@+id/windowBgAlternative"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/llContainer">
+
+        <com.ioext2015tash.activitytransitionanim.widget.SquareImageView
+            android:id="@+id/albumCover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:id="@+id/containerAlbumAuthorTitle">
+            <TextView
+                android:id="@+id/txtAlbumAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextStyleAlbumAuthor"/>
+            <TextView
+                android:id="@+id/txtAlbumTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextStyleAlbumTitle"/>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/songDetailsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white">
+
+            <LinearLayout
+                android:id="@+id/songDetailsContainerInner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/imgVolume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+
+                <TextView
+                    android:id="@+id/txtSongNumber"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/secondary_text_dark"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/txtSongTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/txtSongDuration"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/secondary_text_dark"
+                    android:textSize="18dp" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.Toolbar
+        style="@style/DetailActivityToolbar"
+        android:id="@+id/toolbar_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/abc_action_bar_default_height_material"
+        android:layout_alignParentTop="true"/>
+
+    <com.ioext2015tash.activitytransitionanim.widget.MediaButton
+        android:id="@+id/fab"
+        android:src="@drawable/fab_play_pause"
+        android:scaleType="center"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        style="@style/FABStyle" />
+
+</RelativeLayout>
