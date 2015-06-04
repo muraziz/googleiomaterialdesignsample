@@ -1,50 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:padding="10dp">
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/layer_done"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0f9d58"
+        android:visibility="gone">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="20dp"
+            android:src="@drawable/ic_action_accept" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layer_snooze"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eca403"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="20dp"
+            android:src="@drawable/ic_action_alarms" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:padding="10dp"
-        android:id="@+id/letterIcon"/>
+        android:id="@+id/layer_front"
+        android:background="@android:color/white">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/letterIcon"
-        android:singleLine="true"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:ellipsize="marquee"
-        android:id="@+id/msgTitle"
-        android:paddingTop="5dp"/>
+        <ImageView
+            android:id="@+id/letterIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="marquee"
-        android:layout_alignLeft="@id/msgTitle"
-        android:layout_below="@id/msgTitle"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:singleLine="true"
-        android:id="@+id/msgSender"
-        />
+        <TextView
+            android:id="@+id/msgTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/letterIcon"
+            android:ellipsize="marquee"
+            android:paddingTop="5dp"
+            android:singleLine="true"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:layout_alignLeft="@id/msgSender"
-        android:layout_below="@id/msgSender"
-        android:textSize="14sp"
-        android:id="@+id/msgBody"
-        android:paddingBottom="5dp"/>
+        <TextView
+            android:id="@+id/msgSender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/msgTitle"
+            android:layout_below="@id/msgTitle"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/msgBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/msgSender"
+            android:layout_below="@id/msgSender"
+            android:ellipsize="marquee"
+            android:paddingBottom="5dp"
+            android:singleLine="true"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+</FrameLayout>
