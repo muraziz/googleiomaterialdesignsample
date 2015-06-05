@@ -32,6 +32,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ioext2015tash.animsamples.MainActivity" />
         </activity>
+        <activity
+            android:name=".InterpolatorActivity"
+            android:label="@string/title_activity_interpolator"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ioext2015tash.animsamples.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

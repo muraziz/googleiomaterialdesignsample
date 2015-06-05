@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ioext2015tash.animsamples.InterpolatorActivity">
+
+
+    <TextView
+        android:id="@+id/interpolatorLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/interpolatorSpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:text="@string/interpolator" />
+
+    <Spinner
+        android:id="@+id/interpolatorSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/interpolatorLabel" />
+
+
+    <Button
+        android:id="@+id/animateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/interpolatorLabel"
+        android:layout_centerHorizontal="true"
+        android:text="@string/animate" />
+
+    <View
+        android:id="@+id/square"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/animateButton"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:background="@color/purple"/>
+
+</RelativeLayout>

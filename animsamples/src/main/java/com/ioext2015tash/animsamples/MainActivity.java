@@ -1,7 +1,6 @@
 package com.ioext2015tash.animsamples;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -45,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void openPropertyAnim(View v) {
         Intent intent = new Intent(this, PropertyAnimation.class);
+        startActivity(intent);
+    }
+
+    public void openInterpolator(View v) {
+        Intent intent = new Intent(this, InterpolatorActivity.class);
         startActivity(intent);
     }
 }

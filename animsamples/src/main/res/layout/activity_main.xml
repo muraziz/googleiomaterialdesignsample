@@ -21,5 +21,11 @@
         android:padding="20dp"
         android:onClick="openPropertyAnim"
         />
+    <Button android:text="@string/title_activity_interpolator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:onClick="openInterpolator"
+        />
 
 </LinearLayout>
