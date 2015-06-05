@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Animation Samples</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_view_animation">View Animation</string>
+    <string name="title_activity_property_animation">Property Animation</string>
+</resources>
