@@ -47,14 +47,16 @@ public class AlbumListFragment extends Fragment {
         Intent intent = new Intent();
         intent.setClass(getActivity(), DetailActivity.class);
         intent.putExtra(DetailActivity.ALBUM_INDEX, albumIndex);
-        intent.putExtra(packageName + ".left", screenLocation[0]);
+
+        /* Step 1. Image scaling */
+        /*intent.putExtra(packageName + ".left", screenLocation[0]);
         intent.putExtra(packageName + ".top", screenLocation[1]);
-        intent.putExtra(packageName + ".width", selectedView.getWidth());
-        intent.putExtra(packageName + ".height", selectedView.getHeight());
+        intent.putExtra(packageName + ".width", selectedView.getWidth());*/
+
         getActivity().startActivity(intent);
 
-        // disable default transitions
-        getActivity().overridePendingTransition(0, 0);
+        // Step 1. Image scaling
+        //getActivity().overridePendingTransition(0, 0);
     }
 
     private class AlbumAdapter extends ArrayAdapter<Album> {

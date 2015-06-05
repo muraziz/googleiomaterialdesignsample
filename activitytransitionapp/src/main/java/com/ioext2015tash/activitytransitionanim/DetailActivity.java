@@ -78,8 +78,11 @@ public class DetailActivity extends AppCompatActivity {
 
         preAnimInit();
 
-        fadeInBackground();
-        scaleUpAlbumCover();
+        /* Step 3. Fade in bg */
+        //fadeInBackground();
+
+        /* Step 1. Image scaling */
+        //scaleUpAlbumCover();
     }
 
     private void fadeInBackground() {
@@ -105,17 +108,22 @@ public class DetailActivity extends AppCompatActivity {
 
     private void preAnimInit() {
         // scale fab down to 0
-        mFab.setScaleX(0);
-        mFab.setScaleY(0);
 
-        mToolbar.setAlpha(0);
+        /* Step 5. Scaling up FAB */
+        /*mFab.setScaleX(0);
+        mFab.setScaleY(0);*/
 
-        mSongDetailsContainer.setVisibility(View.INVISIBLE);
+        /* Step 3. Fade in toolbar */
+        //mToolbar.setAlpha(0);
+
+        /* Step 2. Stretching text areas */
+        // Make it invisible first
+        /*mSongDetailsContainer.setVisibility(View.INVISIBLE);
         mAlbumAuthorTitleContainer.setVisibility(View.INVISIBLE);
 
         mTxtAlbumAuthor.setAlpha(0);
         mTxtAlbumTitle.setAlpha(0);
-        mSongDetailsContainerInner.setAlpha(0);
+        mSongDetailsContainerInner.setAlpha(0);*/
     }
 
     private void scaleUpAlbumCover() {
@@ -134,13 +142,13 @@ public class DetailActivity extends AppCompatActivity {
                 mImgAlbumCover.getLocationOnScreen(screenLocation);
 
                 int translationX = mLeft - screenLocation[0];
-                int translationY = mTop - screenLocation[1];
-                float scale = mWidth / (float) mImgAlbumCover.getWidth();
+                int translationY = mTop  - screenLocation[1];
+                float scaleFactor = mWidth / (float) mImgAlbumCover.getWidth();
 
                 mImgAlbumCover.setTranslationX(translationX);
                 mImgAlbumCover.setTranslationY(translationY);
-                mImgAlbumCover.setScaleX(scale);
-                mImgAlbumCover.setScaleY(scale);
+                mImgAlbumCover.setScaleX(scaleFactor);
+                mImgAlbumCover.setScaleY(scaleFactor);
                 mImgAlbumCover.setPivotX(0);
                 mImgAlbumCover.setPivotY(0);
 
@@ -155,8 +163,11 @@ public class DetailActivity extends AppCompatActivity {
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
-                                fadeInToolbar();
-                                stretchBottomPanels();
+                                /* Step 2. Animate Bottom parts */
+                                //stretchBottomPanels();
+
+                                /* Step 4. Fade-in toolbar */
+                                //fadeInToolbar();
                             }
                         });
                 return true;
@@ -200,12 +211,8 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        mSongDetailsContainer.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                scaleUpFab();
-            }
-        }, 500);
+        /* Step 5. Scale up fab */
+        //scaleUpFab(500);
     }
 
     private Animator getTextFadeInAnimator(int startDelay, int duration) {
@@ -245,9 +252,10 @@ public class DetailActivity extends AppCompatActivity {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
     }
 
-    private void scaleUpFab() {
+    private void scaleUpFab(int startDelay) {
         mFab.animate()
                 .setDuration(500)
+                .setStartDelay(startDelay)
                 .scaleX(1)
                 .scaleY(1)
                 .setInterpolator(new EaseOutCirc());
@@ -350,9 +358,13 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        triggerFadeOutTextAndScaleDownFab();
-        fadeOutToolbar();
-        fadeOutBackground(300);
+        /* Step N. Reverse Image scaling */
+
+        //triggerFadeOutTextAndScaleDownFab();
+        //fadeOutToolbar();
+        //fadeOutBackground(300);
+
+        super.onBackPressed();
     }
 
     private void triggerFadeOutTextAndScaleDownFab() {
@@ -397,8 +409,8 @@ public class DetailActivity extends AppCompatActivity {
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                    finish();
-                    overridePendingTransition(0, 0);
+                        finish();
+                        overridePendingTransition(0, 0);
                     }
                 });
 

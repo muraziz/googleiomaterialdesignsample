@@ -9,17 +9,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-            <!--android:layout_below="@id/toolbar_actionbar"/>-->
-
         <include
             android:id="@+id/toolbar_actionbar"
             layout="@layout/toolbar_default"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <!-- HeaderAnim Step 1. Increase ListView height. Swap toolbar and container positions -->
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar_actionbar"/>
+
+
+
 
     </RelativeLayout>
     <!-- android:layout_marginTop="?android:attr/actionBarSize"-->

@@ -57,7 +57,9 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
         ArrayList<MailItem> mailItems = new ArrayList<MailItem>(Arrays.asList(MailData.ITEMS));
         mInboxAdapter = new InboxAdapter(getActivity(), 0, mailItems);
         mListView.setAdapter(mInboxAdapter);
-        mListView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
+        /* HeaderAnim. Step 2. Adding header view to list */
+        /*mListView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
                 mListView.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -69,10 +71,12 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
                 mListView.addHeaderView(headerView);
                 return false;
             }
-        });
+        });*/
 
-        mListView.setOnTouchListener(this);
-        mListView.setOnScrollListener(this);
+        /* HeaderAnim. Step 3. Add onTouchListener */
+        /*mListView.setOnTouchListener(this);
+        mListView.setOnScrollListener(this);*/
+
         return mListView;
     }
 
@@ -95,10 +99,16 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 Log.d("inboxlist", "onTouch() ACTION_UP");
-                final VelocityTracker velocityTracker = mVelocityTracker;
+
+                /* HeaderAnim. Step 5. Consider fling case */
+                /*final VelocityTracker velocityTracker = mVelocityTracker;
                 velocityTracker.computeCurrentVelocity(10);
                 float yVelocity = velocityTracker.getYVelocity();
-                adjustToolbar(yVelocity);
+                adjustToolbar(yVelocity);*/
+
+                /* HeaderAnim. Step 4. Adjust toolbar after finger release */
+                //adjustToolbar(0);
+
                 mPrevTouchY = Float.MAX_VALUE;
                 return false;
         }
@@ -211,7 +221,9 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
             holder.txtTitle.setText(item.msgTitle);
             holder.txtBody.setText(item.msgBody);
             holder.txtSender.setText(item.msgSender);
-            convertView.setOnTouchListener(new InboxListItemTouchListener(convertView, position));
+
+            /* DoneSnooze. Step 2. add ontouchlistener to all list item views */
+            //convertView.setOnTouchListener(new InboxListItemTouchListener(convertView, position));
             return convertView;
         }
     }
@@ -231,8 +243,6 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
         View layerSnooze;
         View host;
         VelocityTracker velocityTracker = VelocityTracker.obtain();
-
-        //Interpolator
 
         InboxListItemTouchListener(View host, int position) {
             this.position = position;
@@ -280,7 +290,9 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     (view.getParent()).requestDisallowInterceptTouchEvent(false);
-                    velocityTracker.computeCurrentVelocity(10);
+
+                    /* DoneSnooze. Step 3. continue movement after touch release */
+                    /*velocityTracker.computeCurrentVelocity(10);
                     float xVelocity = velocityTracker.getXVelocity();
 
                     float layerFrontTransX = layerFront.getTranslationX();
@@ -288,7 +300,7 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
                     if (Math.abs(xVelocity) < 15) {
                         if (layerFrontTransX < -listWidth/2) {
                             // animate out left
-                            animateLeft(layerFrontTransX, listWidth);
+                            animateLeft(listWidth);
                         } else if (layerFrontTransX < listWidth / 2) {
                             // animate back
                             layerFront.animate()
@@ -298,15 +310,15 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
                                     .setListener(null);
                         } else {
                             // animate out right
-                            animateRight(layerFrontTransX, listWidth);
+                            animateRight(listWidth);
                         }
                     } else {
                         if (xVelocity > 0) {
-                            animateRight(layerFrontTransX, listWidth);
+                            animateRight(listWidth);
                         } else {
-                            animateLeft(layerFrontTransX, listWidth);
+                            animateLeft(listWidth);
                         }
-                    }
+                    }*/
                     Log.d("inboxlist", "Horizontal move: ACTION_UP/CANCEL");
                     break;
             }
@@ -315,7 +327,7 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
             return true;
         }
 
-        private void animateLeft(float layerFrontTransX, float listWidth) {
+        private void animateLeft(float listWidth) {
             layerFront.animate()
                     .translationX(-listWidth)
                     .setInterpolator(DECELERATE_INTERPOLATOR)
@@ -323,12 +335,13 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            removeItem(position, false);
+                            /* DoneSnooze. Step 4. Remove item from adapter */
+                            //removeItem(position, false);
                         }
                     });
         }
 
-        private void animateRight(float layerFrontTransX, float listWidth) {
+        private void animateRight(float listWidth) {
             layerFront.animate()
                     .translationX(listWidth)
                     .setInterpolator(DECELERATE_INTERPOLATOR)
@@ -336,7 +349,8 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            removeItem(position, true);
+                            /* DoneSnooze. Step 4. Remove item from adapter */
+                            //removeItem(position, true);
                         }
                     });
         }
@@ -372,7 +386,8 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
     private void deleteFromAdapter(final int position) {
         mInboxAdapter.remove(mInboxAdapter.getItem(position));
 
-        mListView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+        /* DoneSnooze. Step 5. Animate the items going up */
+        /*mListView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
                 mListView.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -386,14 +401,14 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
                         child.setTranslationY(child.getHeight());
                         child.animate()
                                 .translationY(0)
-                                .setDuration(300)
+                                .setDuration(400)
                                 .setInterpolator(DECELERATE_INTERPOLATOR)
                                 .setListener(null);
                     }
                 }
                 return true;
             }
-        });
+        });*/
     }
 
     private class ViewHolder {
