@@ -86,10 +86,10 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
                 Log.d("inboxlist", "onTouch() ACTION_DOWN");
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (mPrevTouchY != Float.NaN) {
+                if (mPrevTouchY != Float.MAX_VALUE) {
                     float diff = event.getY() - mPrevTouchY;
-                    moveToolbar(diff);
                     Log.d("inboxlist", "onTouch() ACTION_MOVE diff=" + diff);
+                    moveToolbar(diff);
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -99,8 +99,8 @@ public class InboxListFragment extends Fragment implements AbsListView.OnScrollL
                 velocityTracker.computeCurrentVelocity(10);
                 float yVelocity = velocityTracker.getYVelocity();
                 adjustToolbar(yVelocity);
-                mPrevTouchY = Float.NaN;
-                break;
+                mPrevTouchY = Float.MAX_VALUE;
+                return false;
         }
         mPrevTouchY = event.getY();
         return false;
