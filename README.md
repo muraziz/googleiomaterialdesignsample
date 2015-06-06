@@ -1,5 +1,10 @@
-# Activity Transition in Material Design concept
+# Animation Samples showcased in Google I/O Extended 2015 in Tashkent
 
-![alt Activity Transition in Material Design](https://github.com/muraziz/googleiomaterialdesignsample/raw/master/activity_transitions.gif)
+Custom activity transition in pre-Lollipop like the one showcased during Material Design presentation
+![alt Activity Transition in Material Design](https://github.com/muraziz/googleiomaterialdesignsample/raw/master/activitytransitionapp/activity_transitions.gif)
 
-Implementation of sample showcased in Google I/O 2014 when presenting Material Design concept
+Google's inbox like animations:
+- Flexible Header
+![alt Inbox's flexible header](https://github.com/muraziz/googleiomaterialdesignsample/raw/master/inboxlikeanimapp/done_snooze_effect.gif)
+- Done/Snooze effect
+![alt Inbox's Done/snooze effect](https://github.com/muraziz/googleiomaterialdesignsample/raw/master/inboxlikeanimapp/done_snooze_effect.gif)
