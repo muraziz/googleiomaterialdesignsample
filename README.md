@@ -5,7 +5,6 @@
 <br/>
 <br/>
 ######Google's inbox like animations:
-<br/>
 - Flexible Header
 <br/>
 <img src="https://github.com/muraziz/googleiomaterialdesignsample/raw/master/inboxlikeanimapp/flexible_toolbar.gif"  width="300" alt="Inbox's flexible header" >
