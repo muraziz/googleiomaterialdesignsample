@@ -212,7 +212,7 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         /* Step 5. Scale up fab */
-        //scaleUpFab(500);
+        scaleUpFab(500);
     }
 
     private Animator getTextFadeInAnimator(int startDelay, int duration) {
@@ -358,7 +358,7 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        /* Step N. Reverse Image scaling */
+        /* Step 6. Reverse Image scaling */
 
         //triggerFadeOutTextAndScaleDownFab();
         //fadeOutToolbar();
